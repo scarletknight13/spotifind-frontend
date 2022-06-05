@@ -3,44 +3,55 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import { allMatchesRoute } from '../utils/APIRoutes';
-import Contacts from './Contacts';
+import Matches from './Matches';
+import ChatDefault from '../components/ChatDefault';
+import ChatContainer from '../components/ChatContainer';
 function Messages() {
   const navigate = useNavigate();
   const [matches, setMatches] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
-  useEffect(async()=>{
-    if (!localStorage.getItem('chat-app-user')){
-      navigate("/login");
-    } 
-    else{
-      setCurrentUser(await JSON.parse(localStorage.getItem('chat-app-user')))
+  const [currentChat, setCurrentChat] = useState(undefined);
+  useEffect(()=>{
+    async function fetchData(){
+      if (!localStorage.getItem('chat-app-user')){
+        navigate("/login");
+      } 
+      else{
+        setCurrentUser(await JSON.parse(localStorage.getItem('chat-app-user')))
+      }
     }
+    fetchData();
   }, [])
-  useEffect(async ()=>{
-    if(currentUser){
-      const data = await axios.get(`${allMatchesRoute}/${currentUser._id}`);
-      setContacts(data.data);
+  useEffect(()=>{
+    async function fetchData(){
+      if(currentUser){
+        const data = await axios.get(`${allMatchesRoute}/${currentUser._id}`);
+        setMatches(data.data);
+      }
+      else{
+        navigate('/login')
+      }
     }
-    else{
-      navigate('/login')
-    }
-  })
+    fetchData();
+  }, [currentUser])
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
   return (
     <>
       <Container>
         <div className="container">
-          <Contacts contacts={contacts} changeChat={handleChatChange} />
+          <Matches matches={matches} changeChat={handleChatChange} />
           {currentChat === undefined ? (
-            <Welcome />
+            <ChatDefault />
           ) : (
-            <ChatContainer currentChat={currentChat} socket={socket} />
+            <ChatContainer currentChat={currentChat} />
           )}
         </div>
       </Container>
     </>
   );
 }
-import { allMatchesRoute } from '../utils/APIRoutes';
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
