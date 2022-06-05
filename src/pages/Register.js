@@ -94,7 +94,7 @@ export default function Register() {
       <FormContainer>
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
-            <h1>snappy</h1>
+            <h1>Spotifind</h1>
           </div>
           <input
             type="text"
