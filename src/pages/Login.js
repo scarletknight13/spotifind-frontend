@@ -7,7 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
 
-export default function Register() {
+export default function Login() {
+
   const navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
@@ -23,10 +24,10 @@ export default function Register() {
 
   useEffect(() => {
     if (localStorage.getItem('chat-app-user')) {
+      console.log('chat user is present so im going to messages', localStorage.getItem('chat-app-user'));
       navigate("/");
     }
   }, []);
-
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
@@ -43,7 +44,6 @@ export default function Register() {
     }
     return true;
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
@@ -61,6 +61,7 @@ export default function Register() {
           'chat-app-user',
           JSON.stringify(data.user)
         );
+        console.log("chat user has been add im going to messages")
         navigate("/");
       }
     }
@@ -104,7 +105,7 @@ const FormContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #131324;
+  background-color: green;
   .brand {
     display: flex;
     align-items: center;

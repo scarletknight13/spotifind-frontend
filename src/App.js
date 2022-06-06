@@ -16,14 +16,12 @@ import {useState} from "react";
 function App() {
   return (
     <div className="App">
-      <Header/>
       <Routes>
         <Route exact path="/" element={<Messages/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path='/profile' element={<Profile/>}/>
       </Routes>
-      <Footer/>
     </div>
   );
 }

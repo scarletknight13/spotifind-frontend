@@ -10,10 +10,12 @@ function Messages() {
   const navigate = useNavigate();
   const [matches, setMatches] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
-  const [currentChat, setCurrentChat] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(localStorage.getItem('chat-app-user'));
   useEffect(()=>{
     async function fetchData(){
+
       if (!localStorage.getItem('chat-app-user')){
+        console.log('Returning to login chat user not available', localStorage.getItem('chat-app-user'))
         navigate("/login");
       } 
       else{
@@ -25,11 +27,13 @@ function Messages() {
   useEffect(()=>{
     async function fetchData(){
       if(currentUser){
-        const data = await axios.get(`${allMatchesRoute}/${currentUser._id}`);
+        console.log(allMatchesRoute);
+        const data = await axios.get(`${allMatchesRoute}${currentUser._id}`);
         setMatches(data.data);
       }
       else{
-        navigate('/login')
+        console.log('I think theres no user so im going back to login', currentUser)
+        // navigate('/login')
       }
     }
     fetchData();

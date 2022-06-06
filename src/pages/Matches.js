@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Matches({ matches, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const navigate = useNavigate();
   useEffect(() => {
-    async function fetchData(){
+    if(!localStorage.getItem('chat-app-user')){
+      console.log('chat user is not available im going to login page', localStorage.getItem('chat-app-user'))
+      navigate('/login')
+    }
+    const fetchData = async () => {
       const data = await JSON.parse(
         localStorage.getItem('chat-app-user')
       );
       setCurrentUserName(data.username);
       setCurrentUserImage(data.profilePic);
-
     }
     fetchData()
   }, []);
   const changeCurrentChat = (index, match) => {
     setCurrentSelected(index);
+    
     changeChat(match);
   };
   return (
@@ -40,12 +46,12 @@ export default function Matches({ matches, changeChat }) {
                 >
                   <div className="avatar">
                     <img
-                      src=''
+                      src={match.user1.username === currentUserName ? match.user2.profilePic : match.user1.profilePic}
                       alt=""
                     />
                   </div>
                   <div className="username">
-                    <h3>{match.username}</h3>
+                    <h3>{match.user1.username === currentUserName ? match.user2.username : match.user1.username}</h3>
                   </div>
                 </div>
               );
@@ -54,7 +60,7 @@ export default function Matches({ matches, changeChat }) {
           <div className="current-user">
             <div className="avatar">
               <img
-                src=''
+                src={currentUserImage}
                 alt="avatar"
               />
             </div>

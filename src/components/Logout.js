@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
 import styled from "styled-components";
 import axios from "axios";
-
 export default function Logout() {
+  console.log('logging out');
   const navigate = useNavigate();
   const handleClick = async () => {
-    const id = await JSON.parse(
-      localStorage.getItem('chat-app-user')
-    )._id;
-    navigate('/login')
+    localStorage.removeItem('chat-app-user');
+    console.log('im deleting chat user and going back to login', localStorage.getItem('chat-app-user'));
+    navigate("/login");
+
   };
   return (
     <Button onClick={handleClick}>

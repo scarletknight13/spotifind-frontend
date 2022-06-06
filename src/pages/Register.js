@@ -26,6 +26,7 @@ export default function Register() {
 
   useEffect(() => {
     if (localStorage.getItem('chat-app-user')) {
+      console.log('chat user is already present going back to chat'); 
       navigate("/");
     }
   }, []);
@@ -84,6 +85,7 @@ export default function Register() {
           'chat-app-user',
           JSON.stringify(data.user)
         );
+        console.log('chat user has been created im going to messages', localStorage.getItem('chat-app-user'));
         navigate("/");
       }
     }

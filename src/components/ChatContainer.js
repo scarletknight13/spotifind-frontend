@@ -9,6 +9,7 @@ import axios from "axios";
 export default function ChatContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
+  console.log('im in chat container', currentChat)
 //   const [arrivalMessage, setArrivalMessage] = useState(null);
 
 //   useEffect(async () => {
@@ -22,16 +23,16 @@ export default function ChatContainer({ currentChat, socket }) {
 //     setMessages(response.data);
 //   }, [currentChat]);
 
-//   useEffect(() => {
-//     const getCurrentChat = async () => {
-//       if (currentChat) {
-//         await JSON.parse(
-//           localStorage.getItem('chat-app-user')
-//         )._id;
-//       }
-//     };
-//     getCurrentChat();
-//   }, [currentChat]);
+  useEffect(() => {
+    const getCurrentChat = async () => {
+      if (currentChat) {
+        await JSON.parse(
+          localStorage.getItem('chat-app-user')
+        )._id;
+      }
+    };
+    getCurrentChat();
+  }, [currentChat]);
 
   const handleSendMsg = async (msg) => {
     // const data = await JSON.parse(
@@ -75,12 +76,12 @@ export default function ChatContainer({ currentChat, socket }) {
         <div className="user-details">
           <div className="avatar">
             <img
-              src={`data:image/svg+xml;base64,${currentChat.profilePic}`}
+              src={currentChat.user2.profilePic}
               alt=""
             />
           </div>
           <div className="username">
-            <h3>{currentChat.username}</h3>
+            <h3>{currentChat.user2.username}</h3>
           </div>
         </div>
         <Logout />
