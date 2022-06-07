@@ -23,7 +23,7 @@ export default function Matches({ matches, changeChat }) {
   }, []);
   const changeCurrentChat = (index, match) => {
     setCurrentSelected(index);
-    
+    console.log(match);
     changeChat(match);
   };
   return (
@@ -32,7 +32,7 @@ export default function Matches({ matches, changeChat }) {
         <Container>
           <div className="brand">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCBmnbqB2U3X8Md-RvAGMGtm9syclTVXqIRA&usqp=CAU" alt="logo" />
-            <h3>Spotify</h3>
+            <h3>Spotifind</h3>
           </div>
           <div className="matches">
             {matches.map((match, index) => {

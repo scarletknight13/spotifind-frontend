@@ -1,16 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
-import { allMatchesRoute } from '../utils/APIRoutes';
+import { allMatchesRoute, host } from '../utils/APIRoutes';
 import Matches from './Matches';
 import ChatDefault from '../components/ChatDefault';
 import ChatContainer from '../components/ChatContainer';
-function Messages() {
+import {io} from 'socket.io-client';
+import Header from '../components/Header';
+function Messaging() {
+  const socket = useRef();
   const navigate = useNavigate();
   const [matches, setMatches] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
-  const [currentChat, setCurrentChat] = useState(localStorage.getItem('chat-app-user'));
+  const [currentChat, setCurrentChat] = useState(undefined);
+  const [currentMessages, setCurrentMessages] = useState(undefined);
   useEffect(()=>{
     async function fetchData(){
 
@@ -24,6 +28,12 @@ function Messages() {
     }
     fetchData();
   }, [])
+  useEffect(() => {
+    if(currentUser){
+      socket.current = io(host)
+      socket.current.emit('add-user', currentUser._id)
+    }
+  }, [currentUser])
   useEffect(()=>{
     async function fetchData(){
       if(currentUser){
@@ -40,16 +50,18 @@ function Messages() {
   }, [currentUser])
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
+    setCurrentMessages(chat.messages);
   };
   return (
     <>
+      <Header/>
       <Container>
         <div className="container">
           <Matches matches={matches} changeChat={handleChatChange} />
           {currentChat === undefined ? (
             <ChatDefault />
           ) : (
-            <ChatContainer currentChat={currentChat} />
+            <ChatContainer currentChat={currentChat} currentMessages={currentMessages} socket={socket}/>
           )}
         </div>
       </Container>
@@ -76,4 +88,4 @@ const Container = styled.div`
     }
   }
 `;
-export default Messages
+export default Messaging

@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logout from "./Logout";
 export default function ChatDefault() {
-  const [userName, setUserName] = useState("me");
+  const [userName, setUserName] = useState(undefined);
   console.log('im in chatDefault')
   useEffect(() => {
     const fetchData = async () =>{
-        setUserName(
-          await JSON.parse(
+        const data = await JSON.parse(
             localStorage.getItem('chat-app-user')
           ).username
-        );
-    fetchData()
+        setUserName(data);
     }
+    fetchData()
   }, []);
   return (
     <Container>
