@@ -75,6 +75,8 @@ export default function Register() {
         email,
         password,
         name,
+        gender: 'male',
+        age: 19,
       });
       console.log(data)
       if (data.status === false) {

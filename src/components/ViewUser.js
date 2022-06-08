@@ -27,10 +27,10 @@ function ViewUser({selectedUser, setSelectedUser}) {
   }, [selectedUser])
   return (
       <div>
-            {
-                users === undefined ? (<h1>loading....</h1>) : 
-                    (currentPotentialMatch)
-            }
+          {
+            users === undefined ? (<h1>loading....</h1>) : 
+              (currentPotentialMatch)
+          }
       </div>
   )
 }

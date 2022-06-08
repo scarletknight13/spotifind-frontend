@@ -4,11 +4,53 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerRoute } from "../utils/APIRoutes";
+import { addToPlaylistRoute } from "../utils/APIRoutes";
 import Header from "../components/Header";
+import Logout from "../components/Logout";
+import '../styles/profile.css';
 function Profile() {
   const [playlistLink, setPlaylistLink] = useState('');
   const [tracks, setTracks] = useState(undefined);
+  const [userSignedIn, setUserSignedIn] = useState(undefined);
+  const [formValues, setFormValues] = useState({
+    email : '',
+    username: '',
+    profilePic: '',
+    bio: '',
+    zipcode: '',
+    gender: '',
+    age: '',
+  })
+  const navigate = useNavigate();
+  useEffect(() => {
+    async function fetchData(){
+      if (!localStorage.getItem('chat-app-user')){
+        navigate("/login");
+      } 
+      else{
+        try{
+          setUserSignedIn(await JSON.parse(localStorage.getItem('chat-app-user')));
+        }
+        catch(error){
+          console.log(error)
+        }
+      }
+    }
+    fetchData();
+  }, [])
+  useEffect(() => {
+    if(userSignedIn){
+      setTracks(userSignedIn.playlist);
+    }
+  }, [userSignedIn])
+  function handleUpdateProfile(){
+
+  }
+  function handleFormChange(event){
+    setFormValues({ ...formValues, [event.target.name]: event.target.value });
+    console.log(formValues);
+  };
+
   function handleSubmitPlaylist(e){
     e.preventDefault();
     const re = /\W/;
@@ -33,15 +75,22 @@ function Profile() {
       }
     })
     )
+    sendPlaylistToDatabase();
     }).catch(function (error) {
       console.error(error);
     });
   }
-  function handleChange(e){
+  async function sendPlaylistToDatabase(){
+    console.log('made it here');
+    const data = await axios.put(`${addToPlaylistRoute}`, {
+      playlist: tracks,
+      _id: userSignedIn._id
+    });
+  }
+  function handleLinkChange(e){
     setPlaylistLink(e.target.value);
   }
   function displayTracks(){
-    console.log(tracks);
     const displayedTracks = tracks.map(track => {
       return (
         <div>
@@ -54,12 +103,33 @@ function Profile() {
   return (
     <div className="profile">
       <Header/>
+      <form onSubmit={(e) => handleUpdateProfile(e)}>
+          <label htmlFor="username">Username: </label>
+          <input id='username' name="username" placeholder="username" onChange={(e) => handleFormChange(e)}/>
+          <br></br>
+          <label htmlFor="email">Email: </label>
+          <input id="email" name="email" placeholder="email" onChange={(e) => handleFormChange(e)}/>
+          <br></br>
+          <label htmlFor="age">Age: </label>
+          <input id="age" type='number' name="age" placeholder="18" onChange={(e) => handleFormChange(e)}/>
+          <br></br>
+          <label htmlFor="zipcode">Zipcode: </label>
+          <input id="zipcode" name="zipcode" placeholder="zipcode" onChange={(e) => handleFormChange(e)}/>
+          <br></br>
+          <label htmlFor="profilePic">Profile Pic: </label>
+          <input id="profilePic" name="profilePic" placeholder="profilePic" onChange={(e) => handleFormChange(e)}/>
+          <br></br>
+          <label htmlFor="bio">Bio: </label>
+          <input id="bio" name="bio" placeholder="bio" onChange={(e) => handleFormChange(e)}/>
+          <input type="submit" placeholder="Submit"/>
+        </form>
       <form onSubmit={(e) => handleSubmitPlaylist(e)}>
         <label>Enter Playlist</label>
-        <input type="text" name='link' onChange={e => handleChange(e)}/>
+        <input type="text" name='link' onChange={e => handleLinkChange(e)}/>
         <button type="submit">Enter</button>
       </form>
-      <div>
+      <Logout/>
+      <div className="playlist">
         {tracks === undefined ? (
             (<h2>No Tracks in Playlist</h2>)
           ) : ( displayTracks()
