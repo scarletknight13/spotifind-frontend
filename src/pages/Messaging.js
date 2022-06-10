@@ -8,6 +8,7 @@ import ChatDefault from '../components/ChatDefault';
 import ChatContainer from '../components/ChatContainer';
 import {io} from 'socket.io-client';
 import Header from '../components/Header';
+import '../styles/Messaging.css'
 function Messaging() {
   const socket = useRef();
   const navigate = useNavigate();
@@ -53,9 +54,9 @@ function Messaging() {
     setCurrentMessages(chat.messages);
   };
   return (
-    <>
+    <div className="Messaging">
       <Header/>
-      <Container>
+      <div className="Container">
         <div className="container">
           <Matches matches={matches} changeChat={handleChatChange} />
           {currentChat === undefined ? (
@@ -64,8 +65,8 @@ function Messaging() {
             <ChatContainer currentChat={currentChat} currentMessages={currentMessages} socket={socket}/>
           )}
         </div>
-      </Container>
-    </>
+      </div>
+    </div>
   );
 }
 const Container = styled.div`

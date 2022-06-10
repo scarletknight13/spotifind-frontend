@@ -13,7 +13,7 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
   const [currentUserName, setCurrentUserName] = useState('');
   const scrollRef = useRef();
   console.log('im in chat container', currentChat)
-//   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
 
 //   useEffect(async () => {
 //     const data = await JSON.parse(
@@ -42,15 +42,15 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
     const data = await JSON.parse(
       localStorage.getItem('chat-app-user')
     );
-    socket.current.emit("send-msg", {
-      recipient: currentChat._id,
-      sender: data._id,
-      msg,
-    });
+    // socket.current.emit("send-msg", {
+    //   recipient: currentChat._id,
+    //   sender: data._id,
+    //   msg,
+    // });
     await axios.post(sendMessageRoute, {
-      from: data._id,
-      to: currentChat._id,
-      message: msg,
+      sender: data.username,
+      recipient: currentChat.username,
+      cotent: msg,
     });
 
     const msgs = [...messages];
@@ -100,7 +100,7 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
                 }`}
               >
                 <div className="content ">
-                  <p>{message.message}</p>
+                  <p>{message.message\}</p>
                 </div>
               </div>
             </div>

@@ -22,6 +22,8 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    gender: '',
+    age: '',
   });
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function Register() {
   }, []);
 
   const handleChange = (event) => {
+    console.log(event.target.name, event.target.value);
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
@@ -69,14 +72,15 @@ export default function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password, name } = values;
+      console.log(values);
+      const { email, username, password, name, gender, age } = values;
       const { data } = await axios.post(registerRoute, {
         username,
         email,
         password,
         name,
-        gender: 'male',
-        age: 19,
+        gender,
+        age,
       });
       console.log(data)
       if (data.status === false) {
@@ -94,8 +98,7 @@ export default function Register() {
   };
 
   return (
-    <>
-      <FormContainer>
+    <div>
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <h1>Spotifind</h1>
@@ -118,6 +121,22 @@ export default function Register() {
             name="email"
             onChange={(e) => handleChange(e)}
           />
+          <label htmlFor="age">Age : {values.age}</label>
+          <input
+            id='age'
+            type="range"
+            placeholder="18"
+            min="18"
+            max='70'
+            name="age"
+            onChange={(e) => handleChange(e)}/>
+          <select name="gender"  onChange={(e) => handleChange(e)}>
+            <option value="Man">Man</option>
+            <option value="Woman">Woman</option>
+            <option value="Transman">Transman</option>
+            <option value="Transwoman">Transwoman</option>
+            <option value="Non-binary">Non-binary</option>
+          </select>
           <input
             type="password"
             placeholder="Password"
@@ -130,81 +149,14 @@ export default function Register() {
             name="confirmPassword"
             onChange={(e) => handleChange(e)}
           />
+          
           <button type="submit">Create User</button>
           <span>
             Already have an account ? <Link to="/login">Login.</Link>
           </span>
         </form>
-      </FormContainer>
       <ToastContainer />
-    </>
+    </div>
   );
 }
 
-const FormContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  align-items: center;
-  background-color: #131324;
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: center;
-    img {
-      height: 5rem;
-    }
-    h1 {
-      color: white;
-      text-transform: uppercase;
-    }
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    background-color: #00000076;
-    border-radius: 2rem;
-    padding: 3rem 5rem;
-  }
-  input {
-    background-color: transparent;
-    padding: 1rem;
-    border: 0.1rem solid #4e0eff;
-    border-radius: 0.4rem;
-    color: white;
-    width: 100%;
-    font-size: 1rem;
-    &:focus {
-      border: 0.1rem solid #997af0;
-      outline: none;
-    }
-  }
-  button {
-    background-color: #4e0eff;
-    color: white;
-    padding: 1rem 2rem;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 0.4rem;
-    font-size: 1rem;
-    text-transform: uppercase;
-    &:hover {
-      background-color: #4e0eff;
-    }
-  }
-  span {
-    color: white;
-    text-transform: uppercase;
-    a {
-      color: #4e0eff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  }
-`;

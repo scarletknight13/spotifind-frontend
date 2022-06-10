@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addToPlaylistRoute } from "../utils/APIRoutes";
+import { addToPlaylistRoute, updateProfileRoute } from "../utils/APIRoutes";
 import Header from "../components/Header";
 import Logout from "../components/Logout";
 import '../styles/profile.css';
@@ -43,7 +43,16 @@ function Profile() {
       setTracks(userSignedIn.playlist);
     }
   }, [userSignedIn])
-  function handleUpdateProfile(){
+  async function handleUpdateProfile(e){
+    e.preventDefault();
+    const tempValues = formValues;
+    for(let i in tempValues){
+      if(tempValues[i] === ''){
+        delete tempValues[i]
+      }
+    }
+    console.log(tempValues);
+    await axios.put(updateProfileRoute, {...tempValues, id : userSignedIn._id});
 
   }
   function handleFormChange(event){
@@ -101,39 +110,70 @@ function Profile() {
     return displayedTracks;
   }
   return (
-    <div className="profile">
-      <Header/>
-      <form onSubmit={(e) => handleUpdateProfile(e)}>
-          <label htmlFor="username">Username: </label>
-          <input id='username' name="username" placeholder="username" onChange={(e) => handleFormChange(e)}/>
-          <br></br>
-          <label htmlFor="email">Email: </label>
-          <input id="email" name="email" placeholder="email" onChange={(e) => handleFormChange(e)}/>
-          <br></br>
-          <label htmlFor="age">Age: </label>
-          <input id="age" type='number' name="age" placeholder="18" onChange={(e) => handleFormChange(e)}/>
-          <br></br>
-          <label htmlFor="zipcode">Zipcode: </label>
-          <input id="zipcode" name="zipcode" placeholder="zipcode" onChange={(e) => handleFormChange(e)}/>
-          <br></br>
-          <label htmlFor="profilePic">Profile Pic: </label>
-          <input id="profilePic" name="profilePic" placeholder="profilePic" onChange={(e) => handleFormChange(e)}/>
-          <br></br>
-          <label htmlFor="bio">Bio: </label>
-          <input id="bio" name="bio" placeholder="bio" onChange={(e) => handleFormChange(e)}/>
+    <div className="Profile">
+    <Header/>
+    <div className="main">
+
+      <form className="profile-form" onSubmit={(e) => handleUpdateProfile(e)}>
+          <div className="form-field">
+            <label htmlFor="username">Username: </label>
+            <input id='username' name="username" placeholder="username" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+          </div>
+          <div className="form-field">
+            <label htmlFor="email">Email: </label>
+            <input id="email" name="email" placeholder="email" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+
+          </div>
+          <div className="form-field">
+            <label htmlFor="age">Age: {formValues.age}</label>
+            <input id="age" type='range' name="age" min='18' max='85' onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+
+          </div>
+          <div className="form-field">
+            <label htmlFor="zipcode">Zipcode: </label>
+            <input id="zipcode" name="zipcode" placeholder="zipcode" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+          </div>
+          <div className="form-field">
+            <label htmlFor="profilePic">Profile Pic: </label>
+            <input id="profilePic" name="profilePic" placeholder="profilePic" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+
+          </div>
+          <div className="form-field">
+            <label htmlFor="bio">Bio: </label>
+            <input id="bio" name="bio" placeholder="bio" onChange={(e) => handleFormChange(e)}/>
+            <br/>
+
+          </div>
+          <div className="form-field">
+            <label for="cars">Gender: </label>
+            <select name="gender" onChange={(e) => handleFormChange(e)}>
+              <option value="Man">Man</option>
+              <option value="Woman">Woman</option>
+              <option value="Transman">Transman</option>
+              <option value="Transwoman">Transwoman</option>
+              <option value="Non-binary">Non-binary</option>
+            </select>
+
+          </div>
           <input type="submit" placeholder="Submit"/>
         </form>
-      <form onSubmit={(e) => handleSubmitPlaylist(e)}>
-        <label>Enter Playlist</label>
-        <input type="text" name='link' onChange={e => handleLinkChange(e)}/>
-        <button type="submit">Enter</button>
-      </form>
-      <Logout/>
-      <div className="playlist">
-        {tracks === undefined ? (
-            (<h2>No Tracks in Playlist</h2>)
-          ) : ( displayTracks()
-        )}
+        <form onSubmit={(e) => handleSubmitPlaylist(e)}>
+          <label>Enter Playlist</label>
+          <input type="text" name='link' onChange={e => handleLinkChange(e)}/>
+          <button type="submit">Enter</button>
+        </form>
+        <Logout/>
+        <div className="playlist">
+          {tracks === undefined ? (
+              (<h2>No Tracks in Playlist</h2>)
+            ) : ( displayTracks()
+          )}
+        </div>
       </div>
     </div>
   )

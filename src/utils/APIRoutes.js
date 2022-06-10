@@ -5,3 +5,7 @@ export const getUsersRoute = `${host}/users/`
 export const allMatchesRoute = `${host}/matches/getmatches/`
 export const sendMessageRoute = `${host}/messages/new`;
 export const addToPlaylistRoute = `${host}/playlists/add`;
+export const updateProfileRoute = `${host}/users/update`;
+export const isMatchRoute = `${host}/matches/isMatch`;
+export const addToLikesRoute = `${host}/likes/add`;
+export const addMatchRoute = `${host}/matches/new`
