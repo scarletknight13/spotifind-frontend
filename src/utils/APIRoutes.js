@@ -1,4 +1,4 @@
-export const host = "http://localhost:4000";
+export const host = "https://lovetrills.herokuapp.com";
 export const loginRoute = `${host}/users/login/`;
 export const registerRoute = `${host}/users/register/`;
 export const getUsersRoute = `${host}/users/potentials/`
