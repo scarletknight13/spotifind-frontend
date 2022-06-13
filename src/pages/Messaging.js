@@ -39,8 +39,13 @@ function Messaging() {
     async function fetchData(){
       if(currentUser){
         console.log(allMatchesRoute);
-        const data = await axios.get(`${allMatchesRoute}${currentUser._id}`);
-        setMatches(data.data);
+        try{
+          const data = await axios.get(`${allMatchesRoute}${currentUser._id}`);
+          setMatches(data.data);
+        }
+        catch(error){
+          console.log(error);
+        }
       }
       else{
         console.log('I think theres no user so im going back to login', currentUser)
@@ -56,37 +61,17 @@ function Messaging() {
   return (
     <div className="Messaging">
       <Header/>
-      <div className="Container">
-        <div className="container">
+      <div className="messages-display">
+        <div className="message-container">
           <Matches matches={matches} changeChat={handleChatChange} />
           {currentChat === undefined ? (
             <ChatDefault />
           ) : (
-            <ChatContainer currentChat={currentChat} currentMessages={currentMessages} socket={socket}/>
+            <ChatContainer matches={matches} currentChat={currentChat} currentMessages={currentMessages} setCurrentMessages={setCurrentMessages} socket={socket}/>
           )}
         </div>
       </div>
     </div>
   );
 }
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  align-items: center;
-  background-color: #131324;
-  .container {
-    height: 85vh;
-    width: 85vw;
-    background-color: #00000076;
-    display: grid;
-    grid-template-columns: 25% 75%;
-    @media screen and (min-width: 720px) and (max-width: 1080px) {
-      grid-template-columns: 35% 65%;
-    }
-  }
-`;
 export default Messaging

@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addToPlaylistRoute, updateProfileRoute } from "../utils/APIRoutes";
+import { addToPlaylistRoute, updateProfileRoute, getUserInfoRoute } from "../utils/APIRoutes";
 import Header from "../components/Header";
 import Logout from "../components/Logout";
-import '../styles/profile.css';
+import '../styles/profile.scss';
 function Profile() {
   const [playlistLink, setPlaylistLink] = useState('');
   const [tracks, setTracks] = useState(undefined);
@@ -40,7 +40,9 @@ function Profile() {
   }, [])
   useEffect(() => {
     if(userSignedIn){
+      console.log(userSignedIn)
       setTracks(userSignedIn.playlist);
+      console.log(userSignedIn);
     }
   }, [userSignedIn])
   async function handleUpdateProfile(e){
@@ -53,14 +55,14 @@ function Profile() {
     }
     console.log(tempValues);
     await axios.put(updateProfileRoute, {...tempValues, id : userSignedIn._id});
-
+    getNewData()
   }
   function handleFormChange(event){
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
     console.log(formValues);
   };
 
-  function handleSubmitPlaylist(e){
+  async function handleSubmitPlaylist(e){
     e.preventDefault();
     const re = /\W/;
     const splitString = playlistLink.split(re);
@@ -76,77 +78,82 @@ function Profile() {
     };
 
     axios.request(options).then(function (response) {
-      setTracks(response.data.items.map((item) => {
+      const temp = response.data.items.map((item) => {
       return {
         artist: item.track.artists[0].name,
         name: item.track.name,
         song_uri: item.track.uri.split(':')[2],
       }
     })
-    )
-    sendPlaylistToDatabase();
-    }).catch(function (error) {
-      console.error(error);
-    });
-  }
-  async function sendPlaylistToDatabase(){
-    console.log('made it here');
-    const data = await axios.put(`${addToPlaylistRoute}`, {
-      playlist: tracks,
+    tracks.forEach(track => temp.push(track));
+    console.log(temp);
+    setTracks(temp);
+    axios.put(`${addToPlaylistRoute}`, {
+      playlist: temp,
       _id: userSignedIn._id
-    });
-  }
+    }).then(res => getNewData()).catch(err => console.log(err))
+    
+  }).catch(function (error) {
+    console.error(error);
+  });
+    console.log(userSignedIn, tracks);
+}
+
   function handleLinkChange(e){
     setPlaylistLink(e.target.value);
   }
   function displayTracks(){
     const displayedTracks = tracks.map(track => {
       return (
-        <div>
-          <a target="_blank" href={`https://open.spotify.com/track/${track.song_uri}`}>{`${track.artist} - ${track.name}`}</a>
+        <div className="track-container">
+          <a className="track" target="_blank" href={`https://open.spotify.com/track/${track.song_uri}`}>{`${track.artist} - ${track.name}`}</a>
         </div>
       )
     })
     return displayedTracks;
   }
-  return (
+  async function getNewData(){
+    const data = await axios.get(`${getUserInfoRoute}/${userSignedIn._id}`);
+    localStorage.setItem(
+      'chat-app-user',
+      JSON.stringify(data.data))
+    console.log(typeof data.data.createdAt)
+  }
+  return userSignedIn ? (
     <div className="Profile">
     <Header/>
+    <h1 className="name">{userSignedIn.name}'s Profile</h1>
     <div className="main">
-
       <form className="profile-form" onSubmit={(e) => handleUpdateProfile(e)}>
           <div className="form-field">
-            <label htmlFor="username">Username: </label>
             <input id='username' name="username" placeholder="username" onChange={(e) => handleFormChange(e)}/>
             <br></br>
           </div>
           <div className="form-field">
-            <label htmlFor="email">Email: </label>
             <input id="email" name="email" placeholder="email" onChange={(e) => handleFormChange(e)}/>
             <br></br>
+
+          </div>
+          <div className="form-field">
+
+            <input id="zipcode" name="zipcode" placeholder="zipcode" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+          </div>
+          <div className="form-field">
+            <input id="profilePic" name="profilePic" placeholder="profilePic" onChange={(e) => handleFormChange(e)}/>
+            <br></br>
+
+          </div>
+          <div className="form-field">
+
+            <input id="bio" name="bio" placeholder="bio" onChange={(e) => handleFormChange(e)}/>
+            <br/>
 
           </div>
           <div className="form-field">
             <label htmlFor="age">Age: {formValues.age}</label>
             <input id="age" type='range' name="age" min='18' max='85' onChange={(e) => handleFormChange(e)}/>
             <br></br>
-
-          </div>
-          <div className="form-field">
-            <label htmlFor="zipcode">Zipcode: </label>
-            <input id="zipcode" name="zipcode" placeholder="zipcode" onChange={(e) => handleFormChange(e)}/>
-            <br></br>
-          </div>
-          <div className="form-field">
-            <label htmlFor="profilePic">Profile Pic: </label>
-            <input id="profilePic" name="profilePic" placeholder="profilePic" onChange={(e) => handleFormChange(e)}/>
-            <br></br>
-
-          </div>
-          <div className="form-field">
-            <label htmlFor="bio">Bio: </label>
-            <input id="bio" name="bio" placeholder="bio" onChange={(e) => handleFormChange(e)}/>
-            <br/>
 
           </div>
           <div className="form-field">
@@ -160,23 +167,22 @@ function Profile() {
             </select>
 
           </div>
-          <input type="submit" placeholder="Submit"/>
+          <input className="submit-button" type="submit" placeholder="Submit"/>
         </form>
+        <div className="playlist">
         <form onSubmit={(e) => handleSubmitPlaylist(e)}>
           <label>Enter Playlist</label>
           <input type="text" name='link' onChange={e => handleLinkChange(e)}/>
           <button type="submit">Enter</button>
         </form>
-        <Logout/>
-        <div className="playlist">
           {tracks === undefined ? (
               (<h2>No Tracks in Playlist</h2>)
             ) : ( displayTracks()
           )}
         </div>
       </div>
-    </div>
-  )
+    </div> 
+  ): <h1>loading...</h1>
 }
 
 export default Profile

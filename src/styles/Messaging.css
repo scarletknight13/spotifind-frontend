@@ -1,5 +1,9 @@
 
-.Container{
+.Messaging{
+  background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6hJAEOSE_mVfMaWrQnPIpROsVBfQBZ0ZJtQ&usqp=CAU");
+  background-size: cover;
+}
+.messages-display{
   height: 95vh;
   width: 100vw;
   display: flex;
@@ -7,9 +11,9 @@
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #737373;
+  background-color: rgba(0, 0, 0, 0.55);
 }
-.container {
+.message-container {
   height: 85vh;
   width: 85vw;
   background-color: #38B6FF;

@@ -10,15 +10,17 @@ function ViewUser({selectedUser, setSelectedUser, userSignedIn, users}) {
     console.log(users)
     const data = users.map((user) => {
       return (
-      <div className='container'>
+      <>
         <img src={user.profilePic}/>
-        <h1>{user.username}</h1>
-      </div>)
+        <h1>{`${user.username} ${user.age}`}</h1>
+        <p>{user.gender}, {user.age}</p>
+        <p>{user.bio}</p>
+      </>)
     })
   setCurrentPotentialMatch(data[selectedUser]);
   }, [selectedUser])
   return (
-      <div>
+      <div className="ViewUser">
           {
             users === undefined ? (<h1>loading....</h1>) : 
               (currentPotentialMatch)

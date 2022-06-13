@@ -35,7 +35,7 @@ export default function Matches({ matches, changeChat }) {
             <img src={logo} alt="logo" />
             <h3>Spotifind</h3>
           </div>
-          <div className="matches">
+          <div className="matched-users">
             {matches.map((match, index) => {
               return (
                 <div

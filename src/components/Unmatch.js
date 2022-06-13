@@ -2,14 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BiPowerOff } from "react-icons/bi";
 import styled from "styled-components";
+import { deleteMatchRoute } from "../utils/APIRoutes";
 import axios from "axios";
-export default function Unmatch() {
+export default function Unmatch({currentUsername, currentChat}) {
   // console.log('logging out');
   const navigate = useNavigate();
   const handleClick = async () => {
-    localStorage.removeItem('chat-app-user');
-    console.log('im deleting chat user and going back to login', localStorage.getItem('chat-app-user'));
-    navigate("/login");
+      console.log(currentChat);
+      await axios.put(`${deleteMatchRoute}/${currentChat.id}`, {user1: currentChat.user1, user2: currentChat.user2});
 
   };
   return (
@@ -25,7 +25,7 @@ const Button = styled.button`
   align-items: center;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: #9a86f3;
+  background-color: #2D12ED;
   border: none;
   cursor: pointer;
   svg {

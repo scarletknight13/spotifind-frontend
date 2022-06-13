@@ -6,13 +6,14 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import {sendMessageRoute} from '../utils/APIRoutes';
 import Messages from "./Messages";
+import Unmatch from "./Unmatch";
+import '../styles/ChatContainer.scss'
 // import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 
-export default function ChatContainer({ currentChat, currentMessages, socket }) {
+export default function ChatContainer({ currentChat, currentMessages, setCurrentMessages, matches, socket }) {
   const [messages, setMessages] = useState([]);
   const [currentUserName, setCurrentUserName] = useState('');
   const scrollRef = useRef();
-  console.log('im in chat container', currentChat)
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
 //   useEffect(async () => {
@@ -47,15 +48,16 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
     //   sender: data._id,
     //   msg,
     // });
+    const userName = (data.username === currentChat.user1.username) ? currentChat.user2.username : currentChat.user1.username; 
     await axios.post(sendMessageRoute, {
       sender: data.username,
-      recipient: currentChat.username,
-      cotent: msg,
+      recipient: userName,
+      content: msg,
     });
 
-    const msgs = [...messages];
-    msgs.push({ fromSelf: true, message: msg });
-    setMessages(msgs);
+    const msgs = [...currentMessages];
+    msgs.push({ sender: data.username, recipient : userName, content: msg });
+    setCurrentMessages(msgs);
   };
 
 //   useEffect(() => {
@@ -75,20 +77,20 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
   }, [messages]);
 
   return (
-    <Container>
+    <div className="Chat-Container">
       <div className="chat-header">
         <div className="user-details">
           <div className="avatar">
             <img
-              src={currentChat.user2.profilePic}
+              src={currentChat.user1.username === currentUserName ? currentChat.user2.profilePic : currentChat.user1.profilePic}
               alt=""
             />
           </div>
           <div className="username">
-            <h3>{currentChat.user2.username}</h3>
+            <h3>{currentChat.user1.username === currentUserName ? currentChat.user2.username : currentChat.user1.username}</h3>
           </div>
         </div>
-        <Logout />
+        <Unmatch currentChat={currentChat} currentUserName={currentUserName}/>
       </div>
       {/* <div className="chat-messages">
         {messages.map((message) => {
@@ -126,8 +128,8 @@ export default function ChatContainer({ currentChat, currentMessages, socket }) 
         })}
       </div>
       
-      <ChatInput handleSendMsg={handleSendMsg} />
-    </Container>
+      <ChatInput setCurrentMessages={setCurrentMessages} handleSendMsg={handleSendMsg} />
+    </div>
   );
 }
 

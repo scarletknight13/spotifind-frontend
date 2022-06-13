@@ -7,9 +7,10 @@ import ViewUser from '../components/ViewUser';
 import Header from '../components/Header';
 import {getUsersRoute} from '../utils/APIRoutes'
 import axios from 'axios'
+import '../styles/Main.scss'
 function Main() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(undefined);
   const [selectedUser, setSelectedUser] = useState(-1);
   const [userSignedIn, setUserSignedIn] = useState(undefined);
   console.log(selectedUser);
@@ -39,17 +40,31 @@ function Main() {
       if(userSignedIn)
         fetchData();
   }, [userSignedIn])
-  return userSignedIn ? (
+  function displayTracks(){
+    const displayedTracks = users[selectedUser].playlist.map(track => {
+      return (
+        <div className="track-container">
+          <a className="track" target="_blank" href={`https://open.spotify.com/track/${track.song_uri}`}>{`${track.artist} - ${track.name}`}</a>
+        </div>
+      )
+    })
+    return displayedTracks;
+  }
+  return users &&  selectedUser < users.length? (
     <div className="Main">
       <Header/>
-      <ViewUser users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser} userSignedIn={userSignedIn}/>
-      <div className="button-container">
-        <Like userSignedIn={userSignedIn} users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
-        <ViewPlaylist/>
-        <Reject selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+      <div className="display-container">
+        <ViewUser className="user-info" users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser} userSignedIn={userSignedIn}/>
+        <div className="button-container">
+          <Like userSignedIn={userSignedIn} users={users} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+          <Reject selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        </div>
+        <div className="potential-playlist-container">
+          {displayTracks()}
+        </div>
       </div>
     </div>
-  ) : <h1>loading...</h1>
+  ) : <div className="Main"><h1>No users match your profile</h1></div>
 }
 
 export default Main

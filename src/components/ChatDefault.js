@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Logout from "./Logout";
 export default function ChatDefault() {
   const [userName, setUserName] = useState(undefined);
-  console.log('im in chatDefault')
   useEffect(() => {
     const fetchData = async () =>{
         const data = await JSON.parse(
@@ -27,6 +26,7 @@ export default function ChatDefault() {
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  background-color:  #c285febb;
   align-items: center;
   color: white;
   flex-direction: column;

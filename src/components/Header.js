@@ -1,25 +1,17 @@
 import { Link } from "react-router-dom";
-// import '../styles/Header.css'
+import '../styles/Header.css'
 import logo from '../assets/LT.png'
 import Logout from "./Logout";
+import '../styles/Header.css'
 function Header(props) {
   //inline style for the nav tag
-  const navStyle = {
-    backgroundColor: '#FFDE59',
-    display: "flex",
-    height: "5vh",
-    justifyContent: "flex-start",
-    padding: "8px",
-    width: "100%",
-    margin: "auto",
-  };
   const linkStlye= {
     textDecoration: "none",
     color: 'black'
   }
   return (
-      <nav className='header-content' style={navStyle}>
-        <img src={logo}/>
+      <div className='header-content'>
+        <img className='logo' src={logo}/>
         <Link className='links'style={linkStlye} to="/profile">
           <div>Profile</div>
         </Link>
@@ -30,7 +22,7 @@ function Header(props) {
           <div>Messages</div>
         </Link>
         <Logout/>
-      </nav>
+      </div>
   );
 }
 

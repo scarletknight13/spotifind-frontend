@@ -3,7 +3,7 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
-function ChatInput() {
+function ChatInput({handleSendMsg}) {
     const [msg, setMsg] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const handleEmojiPickerhideShow = () => {
@@ -14,6 +14,13 @@ function ChatInput() {
         message += emoji.emoji;
         setMsg(message);
     }
+    function handleSendChat(e){
+      e.preventDefault();
+      if (msg.length > 0) {
+        handleSendMsg(msg);
+        setMsg("");
+      }
+    };
   return (
     <Container>
         <div className="button-container">
@@ -22,7 +29,7 @@ function ChatInput() {
                 {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick}/>}
         </div>
             </div>
-            <form className='input-container'>
+            <form className='input-container' onSubmit={handleSendChat}>
                 <input type='text' placeholder='type ypur message here' value={msg} onChange={(e) => setMsg(e.target.value)}/>
                 <button type='submit'>
                     <IoMdSend/>
@@ -37,7 +44,7 @@ const Container = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 5% 95%;
-  background-color: #080420;
+  background-color: #2D12ED;
   padding: 0 2rem;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;

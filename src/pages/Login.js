@@ -6,7 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
-
+import '../styles/Login.scss'
 export default function Login() {
 
   const navigate = useNavigate();
@@ -68,11 +68,10 @@ export default function Login() {
   };
 
   return (
-    <>
-      <FormContainer>
+    <div className="Login">
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
-            <h1>Spotifind</h1>
+            <h1>LoveTrills</h1>
           </div>
           <input
             type="email"
@@ -91,9 +90,8 @@ export default function Login() {
             Don't have an account ? <Link to="/register">Register.</Link>
           </span>
         </form>
-      </FormContainer>
       <ToastContainer />
-    </>
+    </div>
   );
 }
 
@@ -123,7 +121,7 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    background-color: #00000076;
+    background-color: rgba(239, 101, 152, .7);
     border-radius: 2rem;
     padding: 3rem 5rem;
   }

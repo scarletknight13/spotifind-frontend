@@ -6,6 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
+import '../styles/Register.scss'
 
 export default function Register() {
   const navigate = useNavigate();
@@ -98,10 +99,10 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <div className="Register">
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
-            <h1>Spotifind</h1>
+            <h1>LoveTrills</h1>
           </div>
           <input
             type="text"
@@ -121,13 +122,12 @@ export default function Register() {
             name="email"
             onChange={(e) => handleChange(e)}
           />
-          <label htmlFor="age">Age : {values.age}</label>
           <input
             id='age'
-            type="range"
-            placeholder="18"
+            type="number"
+            placeholder="Age"
             min="18"
-            max='70'
+            max='85'
             name="age"
             onChange={(e) => handleChange(e)}/>
           <select name="gender"  onChange={(e) => handleChange(e)}>

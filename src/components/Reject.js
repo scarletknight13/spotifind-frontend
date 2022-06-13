@@ -7,9 +7,9 @@ function Reject({setSelectedUser, selectedUser}) {
     console.log(selectedUser);
   }
   return (
-    <>
-        <button type="submit" onClick={(e)=>handleClick(e)}><BiX/></button>
-    </>
+    <div className="Reject">
+        <button className="reject-button" type="submit" onClick={(e)=>handleClick(e)}><BiX size="lg"/></button>
+    </div>
   )
 }
 

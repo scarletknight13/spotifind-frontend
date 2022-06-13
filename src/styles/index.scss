@@ -1,6 +1,14 @@
 *{
   margin: 0;
   padding: 0;
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+    &-thumb {
+      background-color: #2D12ED;
+      width: 0.1rem;
+      border-radius: 1rem;
+    }
+  }
 }
 body {
   box-sizing: border-box;

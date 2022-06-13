@@ -1,0 +1,64 @@
+.Main{
+    height: 100vh;
+    width: 100vw;
+    background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6hJAEOSE_mVfMaWrQnPIpROsVBfQBZ0ZJtQ&usqp=CAU");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white
+    /* justify-content: center; */
+}
+.header-content{
+    height: 5vh;
+}
+.button-container{
+    display: flex;
+    justify-content: space-between;
+    height: 8vh;
+}
+.ViewUser{
+    width: 100%;
+    margin-bottom: 10vh;
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+        width: 25%;
+    }
+}
+.display-container{
+    height: 95vh;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: rgba(0, 0, 0, 0.55);
+}
+.Like, .Reject{
+    width:25%;
+    display: flex;
+    justify-content: center;
+}
+.like-button{
+    background-color: rgba(0, 128, 0, 0.76);
+}
+.reject-button{
+    background-color: rgba(255, 0, 0, 0.83);
+}
+.reject-button, .like-button{
+    box-shadow: 10px 5px 5px rgba(4, 2, 2, 0.855);
+    width: 30%;
+    height: 8vh;
+    border-radius: 60%;
+}
+.reject-button:hover, .like-button:hover{
+    transform: scale(.97);
+}
+.potential-playlist-container{
+    height: 25vh;
+    padding: 0 2vw;
+    overflow: scroll;
+    overflow-x: hidden;
+}
